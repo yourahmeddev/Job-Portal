@@ -1,3 +1,45 @@
+<?php
+include 'db.php';
+// backend for storing data in for new company users
+if (isset($_POST['submit'])) {
+    $firstName = mysqli_real_escape_string($con, $_POST['first_name']);
+    $lastName = mysqli_real_escape_string($con, $_POST['last_name']);
+    $email = mysqli_real_escape_string($con, $_POST['email']);
+    $password = mysqli_real_escape_string($con, $_POST['password']);
+    $repeatPassword = mysqli_real_escape_string($con, $_POST['repeat_password']);
+
+    $strPassword = password_hash($password, PASSWORD_BCRYPT);
+    $emailQuery = "select * from companyuser where email ='$email'";
+    $query = mysqli_query($con, $emailQuery);
+    $emailCount = mysqli_num_rows($query);
+    if ($emailCount > 0) {
+        echo "Email Already Exist";
+    } else {
+        if ($password === $repeatPassword) {
+            $insertQuery = "insert into companyuser(first_name,last_name,email,password) values('$firstName','$lastName','$email','$strPassword')";
+            $insertQueryRun = mysqli_query($con,$insertQuery);
+            if($insertQueryRun){
+                ?>
+                <script>
+                    alert('Company Registered Successfully');
+                </script>
+                <?php
+
+            }else{
+                ?>
+                <script>
+                    alert('Try Again Something Went Wrong');
+                </script>
+                <?php
+            }
+        } else {
+            echo "Passwords are not matched";
+        }
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,34 +78,33 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
-                            <form class="user">
+                            <form class="user" method="post">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                                            placeholder="First Name">
+                                            placeholder="First Name" name="first_name">
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control form-control-user" id="exampleLastName"
-                                            placeholder="Last Name">
+                                            placeholder="Last Name" name="last_name">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email Address">
+                                        placeholder="Email Address" name="email">
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Password">
+                                            id="exampleInputPassword" placeholder="Password" name="password">
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="password" class="form-control form-control-user"
-                                            id="exampleRepeatPassword" placeholder="Repeat Password">
+                                            id="exampleRepeatPassword" placeholder="Repeat Password"
+                                            name="repeat_password">
                                     </div>
                                 </div>
-                                <a href="login.html" class="btn btn-primary btn-user btn-block">
-                                    Register Account
-                                </a>
+                                <input type="submit" value="Register Now" class="btn btn-primary btn-user btn-block" name="submit">
                                 <hr>
                                 <a href="index.html" class="btn btn-google btn-user btn-block">
                                     <i class="fab fa-google fa-fw"></i> Register with Google
