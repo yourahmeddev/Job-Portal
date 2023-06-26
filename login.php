@@ -1,5 +1,6 @@
 <!-- Backend code for validating the company as user -->
 <?php
+session_start();
 include 'db.php';
 if(isset($_POST['submit'])){
 
@@ -14,7 +15,13 @@ if(isset($_POST['submit'])){
     $emailCount = mysqli_num_rows($query);
     if($emailCount){
         $row=mysqli_fetch_assoc($query);
+
         $dbPass=$row['password'];
+        $_SESSION['firstName'] = $row['first_name'];
+        $_SESSION['lastName'] = $row['last_name'];
+        $_SESSION['email'] = $row['email']; 
+        
+        // here we are storing data in our database
 
         $result = password_verify($password,$dbPass);
         if($result){
