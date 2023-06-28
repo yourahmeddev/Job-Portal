@@ -39,6 +39,7 @@
                         <h6 class="collapse-header">Open Positions</h6>
                         <a class="collapse-item" href="create-open-position.php">Create Open Position</a>
                         <a class="collapse-item" href="view-open-position.php">View Open Position</a>
+                        <a class="collapse-item" href="view-applicants.php">View Applicants For Open Position</a>
                     </div>
                 </div>
             </li>
