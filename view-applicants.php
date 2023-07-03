@@ -49,27 +49,59 @@
   <table class="table table-hover">
     <thead>
       <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
+        <th>Sr.</th>
+        <th>Full Name</th>
         <th>Email</th>
+        <th>Phone</th>
+        <th>Job Title</th>
+        <th>Job Location</th>
+        <th>Job Type</th>
+        <th>Job Salary Range</th>
+        <th>Resume</th>
+        <th>Status</th>
+        <th>Edit</th>
+        <th>Delete</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>John</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
-      </tr>
-      <tr>
-        <td>Mary</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-      </tr>
-      <tr>
-        <td>July</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-      </tr>
+      <!-- backend code for displaying the applicants data -->
+      <?php
+      
+      include 'db.php';
+
+      $selectQuery =  "SELECT jobapplicants.id,jobapplicants.full_name, jobapplicants.job_application_status,jobapplicants.email,jobapplicants.resume,jobapplicants.phone,jobpositions.job_title,jobpositions.job_location,jobpositions.job_type,job_salary_range FROM jobpositions INNER JOIN jobapplicants ON jobapplicants.jobposition_id = jobpositions.id";
+      // $selectQuery =  "SELECT * FROM `jobapplicants`";
+      $selectqueryRun = mysqli_query($con,$selectQuery);
+      // print_r($selectqueryRun);
+      while($row = mysqli_fetch_array($selectqueryRun)){
+        ?>
+        <tr>
+          <td><?php echo $row['id']; ?></td>
+          <td><?php echo $row['full_name']; ?></td>
+          <td><?php echo $row['email']; ?></td>
+          <td><?php echo $row['phone']; ?></td>
+          <td><?php echo $row['job_title']; ?></td>
+          <td><?php echo $row['job_location']; ?></td>
+          <td><?php echo $row['job_type']; ?></td>
+          <td><?php echo $row['job_salary_range']; ?></td>
+          <td>
+            <a class="btn btn-primary" href="<?php echo $row['resume']; ?>">Download</a>
+          </td>
+          <td>
+          <button class="btn btn-primary" ><?php echo $row['job_application_status']; ?></button>
+          </td>
+          <td>
+            <a href="update_applicant.php?id=<?php echo $row['id']; ?>" class="btn btn-primary">Edit</a>
+          </td>
+          <td>
+            <a href="delete_applicant.php?id=<?php echo $row['id']; ?>" class="btn btn-danger">Delete </a>
+          </td>
+        </tr>
+        <?php
+      }
+
+      ?>
+      
     </tbody>
   </table>
                 </div>
